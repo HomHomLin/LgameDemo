@@ -176,6 +176,17 @@ public class Sprite extends LObject implements ActionBind, ISprite, LTrans {
 				row, col, timer);
 	}
 
+
+    private Object mObj = null;
+
+    public void setTag(Object obj){
+        mObj = obj;
+    }
+
+    public Object getTag(){
+        return mObj;
+    }
+
 	/**
 	 * 以下参数分别为 精灵名，取材文件，最大分解桢数,坐标x,坐标y,每行取材宽度,每列取材长度,平均每桢显示时间
 	 * 

@@ -1,5 +1,8 @@
 package com.lhh.test.ld.lgamedemo;
 
+import android.graphics.PointF;
+import android.util.Log;
+
 import loon.LTouch;
 import loon.action.sprite.Sprite;
 import loon.action.sprite.Sprites;
@@ -14,23 +17,25 @@ import loon.core.timer.LTimerContext;
  */
 public class TestScreen extends Screen {
 
-    private  LTexture lt;
     private Sprites sprMgr = null;
     private Sprite sprite = null;
 
     private int x = 50;
     private int y = 250;
 
+    private PointF startP, endP;
+
+
     public TestScreen(){
         super();
-        lt = new LTexture("assets/gameover.png");
-        sprite = new Sprite("assets/default_gift_color.png");
 
-        sprite.setLocation(x, y);
+        startP = new PointF(getHalfWidth(),getHeight());
+        endP = new PointF(0,0);
 
         sprMgr = new Sprites();
 
-        sprMgr.add(sprite);
+        Log.v("screen",getWidth() + " : " + getHeight());
+
     }
 
     @Override
@@ -39,8 +44,12 @@ public class TestScreen extends Screen {
 //        glEx.drawTexture(lt,0,0);
 //        glEx.drawString("Hello",100,100);
         sprMgr.createUI(glEx);
+        for(int i = 0 ; i < sprMgr.size(); i ++){
+            Sprite s = (Sprite)sprMgr.getSprite(i);
+            PointF p = ((TestUtil)s.getTag()).evaluate(startP,endP);
+            s.setLocation(p.x,p.y);
+        }
 
-        sprite.setLocation(  x , -- y);
 
         sprMgr.update(100);
     }
@@ -57,7 +66,11 @@ public class TestScreen extends Screen {
 
     @Override
     public void touchUp(LTouch lTouch) {
-
+        Sprite sprite = new Sprite("assets/default_gift_color.png");
+        sprite.setLocation(x, y);
+        TestUtil tu = new TestUtil(getHeight(),getWidth());
+        sprite.setTag(tu);
+        sprMgr.add(sprite);
     }
 
     @Override

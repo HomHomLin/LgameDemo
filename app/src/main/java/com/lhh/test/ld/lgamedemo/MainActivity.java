@@ -1,5 +1,6 @@
 package com.lhh.test.ld.lgamedemo;
 
+import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.support.v7.app.ActionBarActivity;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -27,8 +29,11 @@ public class MainActivity extends LGame{
         View view = this.inflate(R.layout.activity_main);
         this.getFrameLayout().addView(view);
 
+        WindowManager windowManager = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
+        int mScreenWidth = windowManager.getDefaultDisplay().getWidth();
+        int mScreenHeight = windowManager.getDefaultDisplay().getHeight();
 
-        this.initialization(true,LMode.Fill);
+        this.initialization(mScreenWidth,mScreenHeight,true,LMode.Fill);
 
 
 
