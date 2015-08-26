@@ -1,5 +1,6 @@
 package com.lhh.test.ld.lgamedemo;
 
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.util.Log;
 
@@ -11,6 +12,8 @@ import loon.action.sprite.Sprite;
 import loon.action.sprite.Sprites;
 import loon.core.graphics.Screen;
 import loon.core.graphics.device.LColor;
+import loon.core.graphics.device.LFont;
+import loon.core.graphics.opengl.GL;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
 import loon.core.timer.LTimerContext;
@@ -26,6 +29,9 @@ public class TestScreen extends Screen {
 //    LTexture lt ;
     private Random mRandom;
 
+    private float string_x;
+    private float string_y;
+
 
     public TestScreen(){
         super();
@@ -35,22 +41,42 @@ public class TestScreen extends Screen {
             lts.add(lt);
         }
 //        lt = new LTexture("assets/400.jpg");
-        sprite = new Sprite(lts,150);
-        sprite.setLocation(150,300);
+        sprite = new Sprite(lts,800);
+        sprite.setLocation(150,600);
 
         sprMgr = new Sprites();
         mRandom = new Random();
 
+
         Log.v("screen",getWidth() + " : " + getHeight());
         new Thread(runnable).start();
+        string_y = 600;
+        string_x = getWidth();
 
     }
+
+    private int flag = -3;
 
     @Override
     public void draw(GLEx glEx) {
 //        glEx.setAlpha(0);
 //        glEx.drawTexture(lt,20,getHalfHeight());
-//        glEx.drawString("Hello",100,100);
+        glEx.setFont(LFont.getFont(50));
+//        glEx.setBlendMode(GL.MODE_NONE);
+        glEx.setAntiAlias(true);
+
+//        glEx.drawString("红红送给带头大哥一颗珍珠", string_x, string_y,LColor.red);
+        glEx.drawStyleString("红红送给带头大哥一颗珍珠", string_x, string_y, Color.RED,Color.WHITE,3);
+
+        if(string_x <= 0){
+            flag = 3;
+
+        }else if(string_x >= getWidth()){
+            flag = -3;
+        }
+
+        string_x = string_x + flag;
+
         sprMgr.createUI(glEx);
         sprite.createUI(glEx);
         for(int i = 0 ; i < sprMgr.size(); i ++){

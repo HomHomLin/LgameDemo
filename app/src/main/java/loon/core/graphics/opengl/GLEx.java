@@ -3519,6 +3519,21 @@ public final class GLEx implements LTrans {
 		drawString(message, x, y);
 	}
 
+    public void drawStyleString(String message, float x, float y, int color,
+                                int color1,int k) {
+        if (isClose) {
+            return;
+        }
+        setColor(color);
+        drawString(message, x + k, y);
+        drawString(message, x - k, y);
+        drawString(message, x, y + k);
+        drawString(message, x, y - k);
+        setColor(color1);
+        drawString(message, x, y);
+    }
+
+
 	public void drawStyleString(String message, float x, float y, LColor c1,
 			LColor c2) {
 		if (isClose) {
@@ -3532,6 +3547,29 @@ public final class GLEx implements LTrans {
 		setColorARGB(c2);
 		drawString(message, x, y);
 	}
+
+    /**
+     * 边框距离k
+     * @param message
+     * @param x
+     * @param y
+     * @param c1
+     * @param c2
+     * @param k
+     */
+    public void drawStyleString(String message, float x, float y, LColor c1,
+                                LColor c2,int k ) {
+        if (isClose) {
+            return;
+        }
+        setColorARGB(c1);
+        drawString(message, x + k, y);
+        drawString(message, x - k, y);
+        drawString(message, x, y + k);
+        drawString(message, x, y - k);
+        setColorARGB(c2);
+        drawString(message, x, y);
+    }
 
 	/**
 	 * 绑定指定纹理ID

@@ -44,7 +44,7 @@ public class MainActivity extends LGame{
 
         this.setScreen(ts);
 
-//        this.setFPS(50);
+//        this.setFPS(30);
 
         this.setShowFPS(true);
 

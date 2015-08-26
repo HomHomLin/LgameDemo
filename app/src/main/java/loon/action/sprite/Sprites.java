@@ -526,6 +526,9 @@ public class Sprites implements Serializable, LRelease {
 		for (int i = 0; i < this.size; i++) {
 
 			ISprite spr = sprites[i];
+            if(spr == null){
+                continue;
+            }
 			if (spr.isVisible()) {
 
 				int layerX = spr.x();
