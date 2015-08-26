@@ -1,5 +1,7 @@
 package loon.action.sprite;
 
+import java.util.ArrayList;
+
 import loon.LSystem;
 import loon.action.ActionBind;
 import loon.action.collision.CollisionHelper;
@@ -253,6 +255,10 @@ public class Sprite extends LObject implements ActionBind, ISprite, LTrans {
 		this(images, -1, 0, 0, defaultTimer);
 	}
 
+    public Sprite(ArrayList<LTexture> images,long timer) {
+        this("Sprite" + System.currentTimeMillis(),images, -1, 0, 0, timer);
+    }
+
 	/**
 	 * 以下参数分别为 图像数组,坐标x,坐标y,平均每桢显示时间
 	 * 
@@ -298,6 +304,15 @@ public class Sprite extends LObject implements ActionBind, ISprite, LTrans {
 		this.visible = true;
 		this.transform = LTrans.TRANS_NONE;
 	}
+
+    public Sprite(String spriteName, ArrayList<LTexture> images, int maxFrame, float x,
+                  float y, long timer) {
+        this.setLocation(x, y);
+        this.spriteName = spriteName;
+        this.setAnimation(animation, images, maxFrame, timer);
+        this.visible = true;
+        this.transform = LTrans.TRANS_NONE;
+    }
 
 	/**
 	 * 是否在播放动画
@@ -413,6 +428,19 @@ public class Sprite extends LObject implements ActionBind, ISprite, LTrans {
 			}
 		}
 	}
+
+    private void setAnimation(Animation myAnimation, ArrayList<LTexture> images,
+                              int maxFrame, long timer) {
+        if (maxFrame != -1) {
+            for (int i = 0; i < maxFrame; i++) {
+                myAnimation.addFrame(images.get(i), timer);
+            }
+        } else {
+            for (int i = 0; i < images.size(); i++) {
+                myAnimation.addFrame(images.get(i), timer);
+            }
+        }
+    }
 
 	/**
 	 * 插入指定动画

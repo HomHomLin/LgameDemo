@@ -13,11 +13,15 @@ public class TestUtil {
     private Random mRandom;
     private PointF pointF1;
     private PointF pointF2;
+    private PointF startValue;
+    private PointF endValue;
     private float time = 0;
 
-    public TestUtil(int height, int width){
+    public TestUtil(int height, int width,PointF startP,PointF endP){
         mHeight = height;
         mWidth = width;
+        startValue = startP;
+        endValue = endP;
         time = 0;
         mRandom = new Random();
         pointF1 = getPointF(2);
@@ -36,8 +40,7 @@ public class TestUtil {
         return pointF;
     }
 
-    public PointF evaluate(PointF startValue,
-                           PointF endValue) {
+    public PointF evaluate() {
 
         float timeLeft = 1.0f - time;
 
