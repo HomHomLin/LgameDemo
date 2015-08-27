@@ -1,18 +1,24 @@
 package com.lhh.test.ld.lgamedemo;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import loon.LTouch;
+import loon.action.sprite.Label;
 import loon.action.sprite.Sprite;
 import loon.action.sprite.Sprites;
 import loon.core.graphics.Screen;
 import loon.core.graphics.device.LColor;
 import loon.core.graphics.device.LFont;
+import loon.core.graphics.device.LImage;
 import loon.core.graphics.opengl.GL;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
@@ -31,6 +37,8 @@ public class TestScreen extends Screen {
 
     private float string_x;
     private float string_y;
+    private LTexture font;
+//    Label label;
 
 
     public TestScreen(){
@@ -52,7 +60,35 @@ public class TestScreen extends Screen {
         new Thread(runnable).start();
         string_y = 600;
         string_x = getWidth();
+        initBitmap();
+        font = new LTexture(limage);
+//        label = new Label("State : None", 200, 128);
+//        label.setColor(LColor.red);
+//        add(label);
+    }
 
+    private LImage limage;
+
+    public void initBitmap() {
+        String mstrTitle = "红红送给带头大哥一颗珍珠";
+        Bitmap bmp = Bitmap.createBitmap(700, 150, Bitmap.Config.ARGB_8888);
+        Canvas canvasTemp = new Canvas(bmp);
+        canvasTemp.drawColor(Color.TRANSPARENT);
+        Paint p = new Paint();
+
+        p.setColor(Color.WHITE);
+        p.setTextSize(50);
+        p.setStyle(Paint.Style.FILL_AND_STROKE);
+        p.setStrokeWidth(2);
+        canvasTemp.drawText(mstrTitle, 0, 100, p);
+
+        p.setColor(Color.RED);
+        p.setTextSize(50);
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(2);
+        canvasTemp.drawText(mstrTitle, 0, 100, p);
+
+        limage = new LImage(bmp);
     }
 
     private int flag = -3;
@@ -66,14 +102,10 @@ public class TestScreen extends Screen {
         glEx.setAntiAlias(true);
 
 //        glEx.drawString("红红送给带头大哥一颗珍珠", string_x, string_y,LColor.red);
-        glEx.drawStyleString("红红送给带头大哥一颗珍珠", string_x, string_y, Color.RED,Color.WHITE,3);
 
-        if(string_x <= 0){
-            flag = 3;
+//        glEx.drawStyleString("红红送给带头大哥一颗珍珠", string_x, string_y, Color.RED,Color.WHITE,3);
 
-        }else if(string_x >= getWidth()){
-            flag = -3;
-        }
+
 
         string_x = string_x + flag;
 
@@ -94,6 +126,13 @@ public class TestScreen extends Screen {
 
         sprMgr.update(100);
         sprite.update(150);
+        glEx.drawTexture(font,string_x,string_y);
+        if(string_x <= 0){
+            flag = 3;
+
+        }else if(string_x >= getWidth()){
+            flag = -3;
+        }
     }
 
     @Override
@@ -133,7 +172,7 @@ public class TestScreen extends Screen {
                 sprite.setTag(tu);
                 sprMgr.add(sprite);
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
