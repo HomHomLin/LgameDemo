@@ -70,23 +70,27 @@ public class TestScreen extends Screen {
     private LImage limage;
 
     public void initBitmap() {
-        String mstrTitle = "红红送给带头大哥一颗珍珠";
-        Bitmap bmp = Bitmap.createBitmap(700, 150, Bitmap.Config.ARGB_8888);
+        String mstrTitle = "我是土豪送给主播小美哥一颗珍珠";
+        Bitmap bmp = Bitmap.createBitmap(1000, 150, Bitmap.Config.ARGB_8888);
         Canvas canvasTemp = new Canvas(bmp);
         canvasTemp.drawColor(Color.TRANSPARENT);
-        Paint p = new Paint();
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        String familyName = "宋体";
+        Typeface font = Typeface.create(familyName, Typeface.BOLD);
+        p.setTypeface(font);
+
+        p.setTextSize(52);
+
+        p.setColor(Color.parseColor("#ff5959"));
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(8);
+        canvasTemp.drawText(mstrTitle, 0, 100, p);
 
         p.setColor(Color.WHITE);
-        p.setTextSize(50);
-        p.setStyle(Paint.Style.FILL_AND_STROKE);
-        p.setStrokeWidth(2);
+        p.setStyle(Paint.Style.FILL);
         canvasTemp.drawText(mstrTitle, 0, 100, p);
 
-        p.setColor(Color.RED);
-        p.setTextSize(50);
-        p.setStyle(Paint.Style.STROKE);
-        p.setStrokeWidth(2);
-        canvasTemp.drawText(mstrTitle, 0, 100, p);
 
         limage = new LImage(bmp);
     }
@@ -99,7 +103,7 @@ public class TestScreen extends Screen {
 //        glEx.drawTexture(lt,20,getHalfHeight());
         glEx.setFont(LFont.getFont(50));
 //        glEx.setBlendMode(GL.MODE_NONE);
-        glEx.setAntiAlias(true);
+//        glEx.setAntiAlias(true);
 
 //        glEx.drawString("红红送给带头大哥一颗珍珠", string_x, string_y,LColor.red);
 
