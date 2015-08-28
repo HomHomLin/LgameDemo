@@ -35,6 +35,7 @@ import loon.core.graphics.opengl.LTexture;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -78,7 +79,7 @@ import android.widget.FrameLayout;
  * 
  * }
  * </pre> */
-public abstract class LGame extends Activity {
+public abstract class LGame extends FragmentActivity {
 
 	private static Class<?> getType(Object o) {
 		if (o instanceof Integer) {
@@ -101,10 +102,10 @@ public abstract class LGame extends Activity {
 	}
 
 	public void register(final LSetting setting,
-			final Class<? extends Screen> clazz, final Object... args) {
+			final Class<? extends Screen> clazz,final boolean isCanTouch,final Object... args) {
 		this._listener = setting.listener;
 		this.maxScreen(setting.width, setting.height);
-		this.initialization(setting.landscape, setting.mode);
+		this.initialization(setting.landscape, setting.mode,isCanTouch);
 		this.setShowFPS(setting.showFPS);
 		this.setShowMemory(setting.showMemory);
 		this.setShowLogo(setting.showLogo);
@@ -207,12 +208,12 @@ public abstract class LGame extends Activity {
 		}
 	}
 
-	protected void initialization(final boolean landscape) {
-		initialization(landscape, LMode.Ratio);
+	protected void initialization(final boolean landscape, final boolean isCanTouch) {
+		initialization(landscape, LMode.Ratio, isCanTouch);
 	}
 
-	protected void initialization(final boolean landscape, final LMode mode) {
-		initialization(landscape, true, mode);
+	protected void initialization(final boolean landscape, final LMode mode, final boolean isCanTouch) {
+		initialization(landscape, true, mode, isCanTouch);
 	}
 
 	/**
@@ -223,8 +224,8 @@ public abstract class LGame extends Activity {
 	 * @param landscape
 	 */
 	protected void initialization(final int width, final int height,
-			final boolean landscape) {
-		initialization(width, height, landscape, LMode.Ratio);
+			final boolean landscape, final boolean isCanTouch) {
+		initialization(width, height, landscape, LMode.Ratio,isCanTouch);
 	}
 
 	/**
@@ -236,13 +237,13 @@ public abstract class LGame extends Activity {
 	 * @param mode
 	 */
 	protected void initialization(final int width, final int height,
-			final boolean landscape, final LMode mode) {
+			final boolean landscape, final LMode mode,  final boolean isCanTouch) {
 		maxScreen(width, height);
-		initialization(landscape, mode);
+		initialization(landscape, mode,isCanTouch);
 	}
 
 	protected void initialization(final boolean landscape,
-			final boolean fullScreen, final LMode mode) {
+			final boolean fullScreen, final LMode mode, final boolean isCanTouch) {
 		if (!landscape) {
 			if (LSystem.MAX_SCREEN_HEIGHT > LSystem.MAX_SCREEN_WIDTH) {
 				int tmp_height = LSystem.MAX_SCREEN_HEIGHT;
@@ -250,7 +251,7 @@ public abstract class LGame extends Activity {
 				LSystem.MAX_SCREEN_WIDTH = tmp_height;
 			}
 		}
-		this.gameView = new AndroidView(LGame.this, mode, fullScreen, landscape);
+		this.gameView = new AndroidView(LGame.this, mode, fullScreen, landscape, isCanTouch);
 		if (mode == LMode.Defalut) {
 			// 添加游戏View，显示为指定大小，并居中
 			this.addView(gameView.getView(), gameView.getWidth(),

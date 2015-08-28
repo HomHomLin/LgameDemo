@@ -69,13 +69,15 @@ public class LProcess extends Director {
 
 	private LTransition transition;
 
-	public LProcess(View view, int width, int height) {
+	public LProcess(View view, int width, int height, boolean isCanTouch) {
 		this.width = width;
 		this.height = height;
 		this.screens = new LinkedList<Screen>();
 		this.currentInput = new AndroidInputFactory(this);
 		view.setOnKeyListener(currentInput);
-		view.setOnTouchListener(currentInput);
+        if(isCanTouch) {
+            view.setOnTouchListener(currentInput);
+        }
 		clear();
 	}
 

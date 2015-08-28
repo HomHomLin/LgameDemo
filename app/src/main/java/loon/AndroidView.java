@@ -116,10 +116,10 @@ public final class AndroidView extends CallQueue implements Renderer {
 	private LProcess process;
 
 	public AndroidView(LGame activity, LMode mode, boolean landscape,
-			boolean fullScreen) {
+			boolean fullScreen, boolean isCanTouch) {
 		this.setFPS(LSystem.DEFAULT_MAX_FPS);
 		this.initScreen(activity, mode, landscape, fullScreen);
-		this.surfaceView = createGLSurfaceView(activity);
+		this.surfaceView = createGLSurfaceView(activity,isCanTouch);
 		this.process = LSystem.screenProcess;
 	}
 
@@ -269,7 +269,7 @@ public final class AndroidView extends CallQueue implements Renderer {
 		return context;
 	}
 
-	private SurfaceView createGLSurfaceView(LGame activity) {
+	private SurfaceView createGLSurfaceView(LGame activity, boolean isCanTouch) {
 		android.opengl.GLSurfaceView.EGLConfigChooser configChooser = getEglConfigChooser();
 		if (LSystem.isAndroidVersionHigher(11)) {
 			GLSurfaceView view = new GLSurfaceView(activity) {
@@ -338,7 +338,7 @@ public final class AndroidView extends CallQueue implements Renderer {
 			surfaceView = viewCupcake;
 		}
 		try {
-			LSystem.screenProcess = new LProcess(surfaceView, width, height);
+			LSystem.screenProcess = new LProcess(surfaceView, width, height, isCanTouch);
 			surfaceView.setFocusable(true);
 			surfaceView.setFocusableInTouchMode(true);
 		} catch (Exception empty) {

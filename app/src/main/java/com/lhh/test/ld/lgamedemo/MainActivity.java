@@ -33,7 +33,7 @@ public class MainActivity extends LGame{
         int mScreenWidth = windowManager.getDefaultDisplay().getWidth();
         int mScreenHeight = windowManager.getDefaultDisplay().getHeight();
 
-        this.initialization(mScreenWidth,mScreenHeight,true,LMode.Fill);
+        this.initialization(mScreenWidth,mScreenHeight,true,LMode.Fill,false);
 
 
 
