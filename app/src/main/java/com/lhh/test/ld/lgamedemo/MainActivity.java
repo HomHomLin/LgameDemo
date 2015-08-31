@@ -1,51 +1,43 @@
 package com.lhh.test.ld.lgamedemo;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
-import android.opengl.GLSurfaceView;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.content.pm.ActivityInfo;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
 
 import loon.LGame;
-import loon.LSetting;
-import loon.LSystem;
-import loon.core.graphics.opengl.LTexture;
 
 
 public class MainActivity extends LGame{
 
-    TestScreen ts;
+    GiftScreen ts;
+
+    ArrayList<GiftScreen> mGiftScreen;
 
     @Override
     public void onMain() {
+
+        mGiftScreen = new ArrayList<>();
 
         View view = this.inflate(R.layout.activity_main);
         this.getFrameLayout().addView(view);
 
         WindowManager windowManager = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
-        int mScreenWidth = windowManager.getDefaultDisplay().getWidth();
-        int mScreenHeight = windowManager.getDefaultDisplay().getHeight();
+        final int mScreenWidth = windowManager.getDefaultDisplay().getWidth();
+        final int mScreenHeight = windowManager.getDefaultDisplay().getHeight();
 
         this.initialization(mScreenWidth,mScreenHeight,true,LMode.Fill,false);
 
-
-
-
-        ts = new TestScreen();
+        ts = new GiftScreen(this,5);
 //        LTexture lt = new LTexture("assets/gameover.png");
 //        ts.setBackground(lt);
 
-//        this.setScreen(ts);
+        this.setScreen(ts);
 
         this.setDestroy(false);//不强制关闭整个app
 
@@ -55,8 +47,7 @@ public class MainActivity extends LGame{
 
         this.setShowLogo(false);
 
-        this.gameView().getView().setVisibility(View.GONE);
-
+//        this.gameView().getView().setVisibility(View.GONE);
 
 
 //
@@ -69,23 +60,22 @@ public class MainActivity extends LGame{
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                add();
+//                ts.setRunning(true);
+                MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                MainActivity.this.gameView().getView().setLayoutParams(new RelativeLayout.LayoutParams(mScreenHeight,mScreenWidth));
+                maxScreen(mScreenHeight,mScreenWidth);
             }
         });
+
+
 //        ((TextView)this.findViewById(R.id.tv)).setText("hello");
 
-    }
-
-    public void add(){
-        this.addScreen(ts);
-        this.gameView().getView().setVisibility(View.VISIBLE);
-        this.runFirstScreen();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            ts.setRunning(false);
+
         }
         return super.onKeyDown(keyCode, event);
     }

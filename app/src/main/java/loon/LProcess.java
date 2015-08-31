@@ -539,6 +539,13 @@ public class LProcess extends Director {
         screens.remove(screen);
     }
 
+    public void removeScreen(final int index) {
+        if (index > screens.size() || index < 0) {
+            throw new RuntimeException("Cannot create a [IScreen] instance !");
+        }
+        screens.remove(index);
+    }
+
 	public LinkedList<Screen> getScreens() {
 		return screens;
 	}

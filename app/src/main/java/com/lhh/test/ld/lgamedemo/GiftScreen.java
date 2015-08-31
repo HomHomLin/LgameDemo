@@ -1,5 +1,6 @@
 package com.lhh.test.ld.lgamedemo;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,12 +28,11 @@ import loon.core.timer.LTimerContext;
 /**
  * Created by linhonghong on 2015/8/24.
  */
-public class TestScreen extends Screen {
+public class GiftScreen extends Screen {
 
-    private Sprites sprMgr = null;
-    private Sprite sprite = null;
-    private ArrayList<LTexture> lts;
-//    LTexture lt ;
+    private Sprites mSprMgr = null;
+    private Sprite mSprite = null;//主珍珠动画
+    LTexture lt ;
     private Random mRandom;
 
     private float string_x;
@@ -43,22 +43,44 @@ public class TestScreen extends Screen {
 
     public void setRunning(boolean isRunning){
         this.isRunning = isRunning;
+        if(isRunning){
+            initData();
+        }else{
+            mSprMgr.clear();
+        }
     }
-//    Label label;
+
+    public boolean isRunning(){
+        return isRunning;
+    }
+
+    public Context mContext;
+
+    public int mStr;
 
 
-    public TestScreen(){
+    public void initData(){
+        mSprite.setCurrentFrameIndex(0);
+        string_y = 600;
+        string_x = getWidth();
+        flag = -3;
+    }
+
+
+    public GiftScreen(Context context, int str){
         super();
-        lts = new ArrayList<>();
+        mStr = str;
+        mContext = context;
+        ArrayList<LTexture> lts = new ArrayList<>();
         for(int i = 0 ; i < 22; i ++){
             LTexture lt = new LTexture("assets/zhenzhu_" + (i+1) + ".png");
             lts.add(lt);
         }
-//        lt = new LTexture("assets/400.jpg");
-        sprite = new Sprite(lts,800);
-        sprite.setLocation(150,600);
+        lt = new LTexture("assets/paopao.png");
+        mSprite = new Sprite(lts,800);
+        mSprite.setLocation(150,600);
 
-        sprMgr = new Sprites();
+        mSprMgr = new Sprites();
         mRandom = new Random();
 
 
@@ -68,15 +90,14 @@ public class TestScreen extends Screen {
         string_x = getWidth();
         initBitmap();
         font = new LTexture(limage);
-//        label = new Label("State : None", 200, 128);
-//        label.setColor(LColor.red);
-//        add(label);
+        initData();
+
     }
 
     private LImage limage;
 
     public void initBitmap() {
-        String mstrTitle = "我是土豪送给主播小美哥一颗珍珠";
+        String mstrTitle = "这是第" + mStr + "个场景";
         Bitmap bmp = Bitmap.createBitmap(1000, 150, Bitmap.Config.ARGB_8888);
         Canvas canvasTemp = new Canvas(bmp);
         canvasTemp.drawColor(Color.TRANSPARENT);
@@ -106,39 +127,32 @@ public class TestScreen extends Screen {
     @Override
     public void draw(GLEx glEx) {
         if(isRunning) {
-//        glEx.setAlpha(0);
-//        glEx.drawTexture(lt,20,getHalfHeight());
-            glEx.setFont(LFont.getFont(50));
-//        glEx.setBlendMode(GL.MODE_NONE);
-//        glEx.setAntiAlias(true);
-
-//        glEx.drawString("红红送给带头大哥一颗珍珠", string_x, string_y,LColor.red);
-
-//        glEx.drawStyleString("红红送给带头大哥一颗珍珠", string_x, string_y, Color.RED,Color.WHITE,3);
-
 
             string_x = string_x + flag;
 
-            sprMgr.createUI(glEx);
-            sprite.createUI(glEx);
-            for (int i = 0; i < sprMgr.size(); i++) {
-                Sprite s = (Sprite) sprMgr.getSprite(i);
-                float x = s.getX();
+            mSprMgr.createUI(glEx);
+            mSprite.createUI(glEx);
+            for (int i = 0; i < mSprMgr.size(); i++) {
+                Sprite s = (Sprite) mSprMgr.getSprite(i);
+//                float x = s.getX();
                 float y = s.getY();
                 if (y < 0) {
-                    sprMgr.remove(i);
+                    mSprMgr.remove(i);
+                    s = null;
                     continue;
                 }
                 PointF p = ((TestUtil) s.getTag()).evaluate();
                 s.setLocation(p.x, p.y);
+                s.update(100);
             }
 
 
-            sprMgr.update(100);
-            sprite.update(150);
+//            sprMgr.update(100);
+            mSprite.update(150);
             glEx.drawTexture(font, string_x, string_y);
             if (string_x <= 0) {
                 flag = 3;
+//                isRunning = false;
 
             } else if (string_x >= getWidth()) {
                 flag = -3;
@@ -158,36 +172,26 @@ public class TestScreen extends Screen {
 
     @Override
     public void touchUp(LTouch lTouch) {
-//        int x = mRandom.nextInt(getWidth());
-//        PointF startP = new PointF(x,getHeight());
-//        PointF endP = new PointF(x,0);
-//        Sprite sprite = new Sprite("assets/paopao.png");
-//        sprite.setLocation(startP.x, startP.y);
-//
-//        TestUtil tu = new TestUtil(getHeight(),getWidth(),startP,endP);
-//        sprite.setTag(tu);
-//        sprMgr.add(sprite);
+
     }
 
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            while(isRunning) {
+            while(true) {
+                if(isRunning) {
 
-                Log.i("test","paopao");
-                int x = mRandom.nextInt(getWidth());
-                PointF startP = new PointF(x, getHeight());
-                PointF endP = new PointF(x, 0);
-                Sprite sprite = new Sprite("assets/paopao.png");
-                sprite.setLocation(startP.x, startP.y);
+                    Log.i("test", "paopao");
+                    int x = mRandom.nextInt(getWidth());
+                    PointF startP = new PointF(x, getHeight());
+                    PointF endP = new PointF(x, 0);
+                    Sprite sprite = new Sprite(lt);
+                    sprite.setLocation(startP.x, startP.y);
 
-                TestUtil tu = new TestUtil(getHeight(), getWidth(), startP, endP);
-                sprite.setTag(tu);
-                sprMgr.add(sprite);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    TestUtil tu = new TestUtil(getHeight(), getWidth(), startP, endP);
+                    sprite.setTag(tu);
+                    mSprMgr.add(sprite);
+                    waitTime(150);
                 }
             }
         }
