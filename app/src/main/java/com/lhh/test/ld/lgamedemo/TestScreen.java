@@ -25,7 +25,7 @@ import loon.core.graphics.opengl.LTexture;
 import loon.core.timer.LTimerContext;
 
 /**
- * Created by kascend on 2015/8/24.
+ * Created by linhonghong on 2015/8/24.
  */
 public class TestScreen extends Screen {
 
@@ -38,6 +38,12 @@ public class TestScreen extends Screen {
     private float string_x;
     private float string_y;
     private LTexture font;
+
+    private boolean isRunning = true;
+
+    public void setRunning(boolean isRunning){
+        this.isRunning = isRunning;
+    }
 //    Label label;
 
 
@@ -99,9 +105,10 @@ public class TestScreen extends Screen {
 
     @Override
     public void draw(GLEx glEx) {
+        if(isRunning) {
 //        glEx.setAlpha(0);
 //        glEx.drawTexture(lt,20,getHalfHeight());
-        glEx.setFont(LFont.getFont(50));
+            glEx.setFont(LFont.getFont(50));
 //        glEx.setBlendMode(GL.MODE_NONE);
 //        glEx.setAntiAlias(true);
 
@@ -110,32 +117,32 @@ public class TestScreen extends Screen {
 //        glEx.drawStyleString("红红送给带头大哥一颗珍珠", string_x, string_y, Color.RED,Color.WHITE,3);
 
 
+            string_x = string_x + flag;
 
-        string_x = string_x + flag;
-
-        sprMgr.createUI(glEx);
-        sprite.createUI(glEx);
-        for(int i = 0 ; i < sprMgr.size(); i ++){
-            Sprite s = (Sprite)sprMgr.getSprite(i);
-            float x = s.getX();
-            float y = s.getY();
-            if(y < 0 ){
-                sprMgr.remove(i);
-                continue;
+            sprMgr.createUI(glEx);
+            sprite.createUI(glEx);
+            for (int i = 0; i < sprMgr.size(); i++) {
+                Sprite s = (Sprite) sprMgr.getSprite(i);
+                float x = s.getX();
+                float y = s.getY();
+                if (y < 0) {
+                    sprMgr.remove(i);
+                    continue;
+                }
+                PointF p = ((TestUtil) s.getTag()).evaluate();
+                s.setLocation(p.x, p.y);
             }
-            PointF p = ((TestUtil)s.getTag()).evaluate();
-            s.setLocation(p.x,p.y);
-        }
 
 
-        sprMgr.update(100);
-        sprite.update(150);
-        glEx.drawTexture(font,string_x,string_y);
-        if(string_x <= 0){
-            flag = 3;
+            sprMgr.update(100);
+            sprite.update(150);
+            glEx.drawTexture(font, string_x, string_y);
+            if (string_x <= 0) {
+                flag = 3;
 
-        }else if(string_x >= getWidth()){
-            flag = -3;
+            } else if (string_x >= getWidth()) {
+                flag = -3;
+            }
         }
     }
 
@@ -165,7 +172,9 @@ public class TestScreen extends Screen {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            while(true) {
+            while(isRunning) {
+
+                Log.i("test","paopao");
                 int x = mRandom.nextInt(getWidth());
                 PointF startP = new PointF(x, getHeight());
                 PointF endP = new PointF(x, 0);

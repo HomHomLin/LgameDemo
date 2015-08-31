@@ -629,6 +629,17 @@ public abstract class LGame extends FragmentActivity {
 		}
 	}
 
+    /**
+     * 缓存中移除Screen数据，但是不立即执行
+     *
+     * @param screen
+     */
+    public void removeScreen(Screen screen) {
+        if (LSystem.screenProcess != null) {
+            LSystem.screenProcess.removeScreen(screen);
+        }
+    }
+
 	/**
 	 * 切换当前窗体为指定Screen
 	 * 

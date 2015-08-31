@@ -74,8 +74,8 @@ public class LProcess extends Director {
 		this.height = height;
 		this.screens = new LinkedList<Screen>();
 		this.currentInput = new AndroidInputFactory(this);
-		view.setOnKeyListener(currentInput);
         if(isCanTouch) {
+		    view.setOnKeyListener(currentInput);
             view.setOnTouchListener(currentInput);
         }
 		clear();
@@ -531,6 +531,13 @@ public class LProcess extends Director {
 		}
 		screens.add(screen);
 	}
+
+    public void removeScreen(final Screen screen) {
+        if (screen == null) {
+            throw new RuntimeException("Cannot create a [IScreen] instance !");
+        }
+        screens.remove(screen);
+    }
 
 	public LinkedList<Screen> getScreens() {
 		return screens;
